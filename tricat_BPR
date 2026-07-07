@@ -1,0 +1,70 @@
+####code to compute TriCat_n^{BPR}(q,r,1) according to the Dyck path formula in BPR
+#for some reason I denote this by A() (for alternating)
+#sorry for the lack of comments! let me know if you have any questions about anything
+n = 9
+P = posets.TamariLattice(n)
+R.<q,t> = PolynomialRing(ZZ)
+G = P.hasse_diagram()
+#zeta_3 = e^((2*pi*i)/3)
+
+#couldn't find this in sage for some reason, but dp to compute longest chain from v to all other vertices in graph reachable from v
+#exploits fact that poset is a DAG
+def longest_chain_lengths(G, v):
+    top_order = G.topological_sort()
+    distances = {v: 0}
+    for v in top_order:
+        if v not in distances:
+            continue
+        for w in G.neighbor_out_iterator(v):
+            if w in distances:
+                distances[w] = max(distances.get(w), distances[v] + 1)
+            else:
+                distances[w] = distances[v] + 1
+    return distances
+
+
+
+def i(b):
+  H = G.reverse()
+  distances = longest_chain_lengths(H,b)
+  f = 0
+  for key in distances:
+      f = f+q^(distances[key])
+  return f
+
+      
+#converts a Dyck word to a Dyck path
+def path(b):
+  temp = DyckWord(list(b[0:-1])).to_non_decreasing_parking_function()
+  path = []
+  for i in temp:
+    path.append(i-1)
+  return path
+
+#returns a polynomial in t
+def dinv(b):
+  c = []
+  path_b = path(b)
+  for i in range(len(path_b)):
+    c.append(i-path_b[i])
+  count = 0
+  for j in range(0,n):
+    for i in range(0,j):
+      if c[i] - c[j] == 0 or c[i] - c[j] == 1:
+        count = count+1
+  return t^count   
+
+#returns a polynomial in q, t
+def A():
+  f = 0
+  for b in P:
+    f = f + i(b)*dinv(b)
+  return f
+
+
+
+f = A()
+print(f(q,1/q))
+#f(zeta_3,zeta_3^2).simplify_full()
+    
+  
