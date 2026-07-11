@@ -37,16 +37,20 @@ def dinv(b):
   return t^DyckWord(list(b)[0:-1]).dinv() 
 
 def bounce(b):
-    return DyckWord(list(b[0:-1])).bounce()
+    return t^DyckWord(list(b[0:-1])).bounce()
 
 #returns a polynomial in q, t
-def A():
+def A_bounce():
   f = 0
   for b in P:
     f = f + i(b)*bounce(b)
   return f
 
-f = A()
-print(f(q,1/q))
-#f(zeta_3,zeta_3^2).simplify_full()
+def A_bounce():
+  f = 0
+  for b in P:
+    f = f + i(b)*dinv(b)
+  return f
+
+
     
