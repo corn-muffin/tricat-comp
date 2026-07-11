@@ -1,0 +1,52 @@
+####code to compute TriCat but replacing dinv with bounce
+#conjecture: this is actually the same polynomial
+n = 6
+P = posets.TamariLattice(n)
+R.<q,t> = PolynomialRing(ZZ)
+G = P.hasse_diagram()
+#zeta_3 = e^((2*pi*i)/3)
+
+#couldn't find this in sage for some reason, but dp to compute longest chain from v to all other vertices in graph reachable from v
+#exploits fact that poset is a DAG
+def longest_chain_lengths(G, v):
+    top_order = G.topological_sort()
+    distances = {v: 0}
+    for v in top_order:
+        if v not in distances:
+            continue
+        for w in G.neighbor_out_iterator(v):
+            if w in distances:
+                distances[w] = max(distances.get(w), distances[v] + 1)
+            else:
+                distances[w] = distances[v] + 1
+    return distances
+
+
+
+def i(b):
+  H = G.reverse()
+  distances = longest_chain_lengths(H,b)
+  f = 0
+  for key in distances:
+      f = f+q^(distances[key])
+  return f
+
+
+#returns a polynomial in t
+def dinv(b):
+  return t^DyckWord(list(b)[0:-1]).dinv() 
+
+def bounce(b):
+    return DyckWord(list(b[0:-1])).bounce()
+
+#returns a polynomial in q, t
+def A():
+  f = 0
+  for b in P:
+    f = f + i(b)*bounce(b)
+  return f
+
+f = A()
+print(f(q,1/q))
+#f(zeta_3,zeta_3^2).simplify_full()
+    
