@@ -1,7 +1,9 @@
 b = DyckWord([1,0])
-TIP_set = TamariIntervalPosets(3)
+n = 3
+TIP_set = TamariIntervalPosets(n)
 R.<q,t> = PolynomialRing(ZZ)
 
+#area multiplicity for a dyck path
 def v_dyck(b):
     area = b.to_area_sequence()
 
@@ -14,22 +16,26 @@ def v_dyck(b):
 
     return v
 
+#area multiplicity vector
 def v(P):
   b = P.upper_dyck_word()
   return v_dyck(b)
 
-  
+#number of connected components in the decreasing forest 
 def r(P):
     roots = P.decreasing_roots()
     return len(list(roots))
 
-  
+
+#dinv of the upper dyck path
 def dinv(P):
   return t^(P.upper_dyck_word()).dinv()
 
+#distance
 def d(P):
   return q^(P.number_of_tamari_inversions())
 
+#a is a composition, s<=n, f(a,s) is tricat_n,s,a
 def f(a,s):
     poly = 0
     for P in TIP:
