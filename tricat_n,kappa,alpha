@@ -1,0 +1,41 @@
+b = DyckWord([1,0])
+TIP_set = TamariIntervalPosets(3)
+R.<q,t> = PolynomialRing(ZZ)
+
+def v_dyck(b):
+    area = b.to_area_sequence()
+
+    m = max(area)
+
+    v = [0]*(m+1)
+
+    for a in area:
+        v[a] += 1
+
+    return v
+
+def v(P):
+  b = P.upper_dyck_word()
+  return v_dyck(b)
+
+  
+def r(P):
+    roots = P.decreasing_roots()
+    return len(list(roots))
+
+  
+def dinv(P):
+  return t^(P.upper_dyck_word()).dinv()
+
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+def f(a,s):
+    poly = 0
+    for P in TIP:
+        if v(P) == a and r(P) == s:
+            poly = poly + d(P)*d(P)
+    return poly
+
+
+    
