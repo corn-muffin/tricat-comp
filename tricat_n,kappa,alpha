@@ -2,6 +2,7 @@ b = DyckWord([1,0])
 n = 3
 TIP_set = TamariIntervalPosets(n)
 R.<q,t> = PolynomialRing(ZZ)
+comp = list(Compositions(n))
 
 #area multiplicity for a dyck path
 def v_dyck(b):
@@ -42,6 +43,15 @@ def f(a,s):
         if v(P) == a and r(P) == s:
             poly = poly + d(P)*d(P)
     return poly
+
+
+for s in range(1,n+1):
+    sum = 0
+    for a in comp:
+        sum = sum+f(a,s)
+    print(sum)
+    print(sum(zeta,zeta^2).simplify_full())
+
 
 
     
