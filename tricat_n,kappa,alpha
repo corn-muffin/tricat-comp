@@ -41,7 +41,7 @@ def f(a,s):
     poly = 0
     for P in TIP:
         if v(P) == a and r(P) == s:
-            poly = poly + d(P)*d(P)
+            poly = poly + d(P)*dinv(P)
     return poly
 
 
