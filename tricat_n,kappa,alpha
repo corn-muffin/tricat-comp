@@ -27,6 +27,25 @@ def r(P):
     roots = P.decreasing_roots()
     return len(list(roots))
 
+def z(P):
+    a = P.lower_dyck_word()
+    b = P.upper_dyck_word()
+    area_a = a.to_area_sequence()
+    area_b = b.to_area_sequence()
+    index_1 = 0
+    index_2 = 0
+    z_vec = []
+    for i in area_b:
+        if i == 0:
+            num_z = 0
+            for j in range(index_1,index_2):
+                if area_a[j] == 0:
+                    num = num+1
+            z_vec.append(num)
+            index_1 = index_2
+        index_2 = index_2+1
+    return z_vec
+
 
 #dinv of the upper dyck path
 def dinv(P):
@@ -44,6 +63,12 @@ def f(a,s):
             poly = poly + d(P)*dinv(P)
     return poly
 
+def f_s(a):
+    poly = 0
+    for P in TIP:
+        if r(P) == s:
+            poly = poly + d(P)*dinv(P)
+    return poly
 
 for s in range(1,n+1):
     sum = 0
