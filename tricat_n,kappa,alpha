@@ -69,12 +69,13 @@ def f(a,s):
             poly = poly + d(P)*dinv(P)
     return poly
 
-def f_s(a):
+def f(alpha):
     poly = 0
     for P in TIP:
-        if r(P) == s:
+        if z(P) == alpha:
             poly = poly + d(P)*dinv(P)
     return poly
+
 
 for s in range(1,n+1):
     sum = 0
