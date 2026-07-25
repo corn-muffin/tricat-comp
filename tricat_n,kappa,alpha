@@ -61,6 +61,15 @@ def dinv(P):
 def d(P):
   return q^(P.number_of_tamari_inversions())
 
+def f(s):
+    poly = 0
+    for P in TIP:
+        if r(P) == s:
+            poly = poly + d(P)*dinv(P)
+    return poly
+ 
+
+"""
 #a is a composition, s<=n, f(a,s) is tricat_n,s,a
 def f(a,s):
     poly = 0
@@ -75,14 +84,10 @@ def f(alpha):
         if z(P) == alpha:
             poly = poly + d(P)*dinv(P)
     return poly
+"""
 
-
-for s in range(1,n+1):
-    sum = 0
-    for a in comp:
-        sum = sum+f(a,s)
-    print(sum)
-    print(sum(zeta,zeta^2).simplify_full())
+zeta = I
+float(f(2)(zeta))
 
 
 
