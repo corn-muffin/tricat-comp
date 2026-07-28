@@ -1,0 +1,21 @@
+n = 3
+TIP = TamariIntervalPosets(n)
+
+def r(P):
+    roots = P.decreasing_roots()
+    return len(list(roots))
+
+
+def number_of_pf(P):
+  b = (P.upper_dyck_word()).to_area_sequence()
+  return multinomial(n, *list(b))
+  
+def pf_count(k):
+  tot = 0
+  for P in TIP:
+    #print(number_of_pf(P))
+    if r(P) == k:
+        tot = tot + number_of_pf(P)
+  return tot
+
+pf_count(1)
