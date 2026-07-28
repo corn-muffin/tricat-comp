@@ -1,21 +1,51 @@
-n = 3
+n = 4
 TIP = TamariIntervalPosets(n)
 
+def co(P):
+    b =  (P.upper_dyck_word()).to_area_sequence()
+    new = []
+    for i in range(len(b)):
+        new.append(i - b[i])
+    counts = []
+    cur = 0
+    for i in range(len(new)-1):
+        cur = cur + 1
+        if new[i+1] != new[i]:
+            counts.append(cur)
+            cur = 0
+    counts.append(cur+1)
+    return counts
+        
+    
+def mult(l):
+    orig = factorial(l[0])
+    for i in l[1:]:
+        orig = orig/factorial(i)
+    return orig
+
+#number of connected components in the decreasing forest 
 def r(P):
     roots = P.decreasing_roots()
     return len(list(roots))
 
 
 def number_of_pf(P):
-  b = (P.upper_dyck_word()).to_area_sequence()
-  return multinomial(n, *list(b))
+  b = co(P)
+  return mult([n,*list(b)])
   
 def pf_count(k):
   tot = 0
   for P in TIP:
+    #print(co(P))
     #print(number_of_pf(P))
+    #print((P.upper_dyck_word()).to_area_sequence())
     if r(P) == k:
         tot = tot + number_of_pf(P)
   return tot
 
-pf_count(1)
+tot = 0
+for i in range(1,n+1):
+    print(pf_count(i))
+    tot = tot + pf_count(i)
+print(tot)
+    
