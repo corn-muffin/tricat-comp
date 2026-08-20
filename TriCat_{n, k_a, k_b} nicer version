@@ -1,5 +1,9 @@
 R.<q,t> = PolynomialRing(ZZ)
 
+"""
+the cleanest and simplest version of my code to compute TriCat - Rosa
+"""
+
 #number of contacts in lower path
 def r_lower(P):
     a = P.lower_dyck_word()
