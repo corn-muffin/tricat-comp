@@ -1,0 +1,37 @@
+R.<q,t> = PolynomialRing(ZZ)
+
+#number of contacts in lower path
+def r_lower(P):
+    a = P.lower_dyck_word()
+    return a.number_of_touch_points()
+
+#number of contacts in upper path
+def r_upper(P):
+    b = P.upper_dyck_word()
+    return b.number_of_touch_points()
+
+#dinv of the upper dyck path
+def dinv(P):
+  return t^(P.upper_dyck_word()).dinv()
+
+#distance
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+#TriCat_{n, k_a, k_b}
+def TriCat(n,k_1,k_2):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r_lower(P) == k_1 and r_upper(P) == k_2:
+      poly = poly + dinv(P)*d(P)
+  return poly
+
+#TriCat_{n, k_a}
+def TriCat(n,k):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r_lower(P) == k:
+      poly = poly + dinv(P)*d(P)
+  return poly
