@@ -1,3 +1,5 @@
+R.<q,t> = PolynomialRing(ZZ)
+
 def R(k,r,s,lam1,lam2):
   lam1 = list(lam1)
   lam2 = list(lam2)
