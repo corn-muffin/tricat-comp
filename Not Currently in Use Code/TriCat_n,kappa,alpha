@@ -1,1 +1,94 @@
+b = DyckWord([1,0])
+n = 3
+TIP_set = TamariIntervalPosets(n)
+R.<q,t> = PolynomialRing(ZZ)
+comp = list(Compositions(n))
 
+#area multiplicity for a dyck path
+def v_dyck(b):
+    area = b.to_area_sequence()
+
+    m = max(area)
+
+    v = [0]*(m+1)
+
+    for a in area:
+        v[a] += 1
+
+    return v
+
+#area multiplicity vector
+def v(P):
+  b = P.upper_dyck_word()
+  return v_dyck(b)
+
+#number of connected components in the decreasing forest 
+def r(P):
+    roots = P.decreasing_roots()
+    return len(list(roots))
+
+def z(P):
+    a = P.lower_dyck_word()
+    b = P.upper_dyck_word()
+    area_a = a.to_area_sequence()
+    area_b = b.to_area_sequence()
+    index_1 = 0
+    index_2 = 0
+    z_vec = []
+    for i in area_b[1:]:
+        index_2 = index_2+1
+        if i == 0:
+            num_z = 0
+            for j in range(index_1,index_2):
+                if area_a[j] == 0:
+                    num_z = num_z+1
+            z_vec.append(num_z)
+            index_1 = index_2
+    last = 0
+    num_z = 0
+    for j in range(index_1,len(area_a)):
+        if area_a[j]==0:
+            num_z = num_z + 1
+    z_vec.append(num_z)
+    return z_vec
+
+
+#dinv of the upper dyck path
+def dinv(P):
+  return t^(P.upper_dyck_word()).dinv()
+
+#distance
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+def f(s):
+    poly = 0
+    for P in TIP:
+        if r(P) == s:
+            poly = poly + d(P)*dinv(P)
+    return poly
+ 
+
+"""
+#a is a composition, s<=n, f(a,s) is tricat_n,s,a
+def f(a,s):
+    poly = 0
+    for P in TIP:
+        if v(P) == a and r(P) == s:
+            poly = poly + d(P)*dinv(P)
+    return poly
+
+def f(alpha):
+    poly = 0
+    for P in TIP:
+        if z(P) == alpha:
+            poly = poly + d(P)*dinv(P)
+    return poly
+"""
+
+zeta = I
+float(f(2)(zeta))
+
+
+
+    
