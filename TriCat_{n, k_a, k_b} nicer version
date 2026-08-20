@@ -22,20 +22,20 @@ def dinv(P):
 def d(P):
   return q^(P.number_of_tamari_inversions())
 
-#TriCat_{n, k_a, k_b}
-def TriCat(n,k_1,k_2):
-  TIP = TamariIntervalPosets(n)
-  poly = 0
-  for P in TIP:
-    if r_lower(P) == k_1 and r_upper(P) == k_2:
-      poly = poly + dinv(P)*d(P)
-  return poly
-
 #TriCat_{n, k_a}
 def TriCat(n,k):
   TIP = TamariIntervalPosets(n)
   poly = 0
   for P in TIP:
     if r_lower(P) == k:
+      poly = poly + dinv(P)*d(P)
+  return poly
+
+#TriCat_{n, k_a, k_b}. the underscore 'cat' is for catalytic :)
+def TriCat_cat(n,k_1,k_2):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r_lower(P) == k_1 and r_upper(P) == k_2:
       poly = poly + dinv(P)*d(P)
   return poly
