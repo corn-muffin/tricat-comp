@@ -1,0 +1,29 @@
+def R(k,r,s,lam1,lam2):
+  lam1 = list(lam1)
+  lam2 = list(lam2)
+  while len(lam1)<k:
+    lam1.append(0)
+  while len(lam2)<r:
+    lam2.append(0)
+  lam1 = lam1[::-1]
+  lam2 = lam2[::-1]
+  lam1.append(r)
+  lam2.append(s)
+  #print(lam1,lam2)
+  tot = 0
+  for i in range(k):
+    if lam1[i+1] - lam1[i]>1:
+      tot = tot + 1
+    elif lam1[i+1]-lam1[i] == 1:
+      if lam2[lam1[i]] != lam2[lam1[i]+1]:
+        tot = tot +1
+  return tot
+
+def f(k,r,s):
+  S = PartitionsInBox(k-1,r)
+  T = PartitionsInBox(r-1,s)
+  poly = 0
+  for lam1 in S:
+    for lam2 in T:
+      poly = poly + R(k,r,s,lam1,lam2)*t^(lam1.size()+lam2.size())
+  return poly
