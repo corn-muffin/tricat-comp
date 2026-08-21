@@ -1,13 +1,42 @@
 R.<q,t> = PolynomialRing(ZZ)
 Sym = SymmetricFunctions(R)
+schur = Sym.s()
+Q = QuasiSymmetricFunctions(R)
+ges = Q.F()
 
 """
 code to compute BPR's TriPark for r = 1
 """
+def co(f):
+  pass
+
+def dinv(f):
+  return t^(f.dinv())
 
 def parking_sum(P):
   b = P.upper_dyck_word()
   pf_list = b.list_parking_functions()
   tot = 0
-  for park in pf_list:
+  for f in pf_list:
+    tot = tot + t^dinv(f)*ges(co(f))
+  return tot
+
+def r(P):
+    a = P.lower_dyck_word()
+    return a.number_of_touch_points()
+
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+def TriPark(n,k):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r(P) == k:
+      poly = poly + d(P)*parking_sum(P)
+  return poly
+
+
+    
+    
     
