@@ -46,9 +46,29 @@ def TriPark_full(n):
       poly = poly + d(P)*parking_sum(P)
   return poly
 
-poly = (TriPark(4,2)).to_symmetric_function()
+poly = (TriPark(4,1)).to_symmetric_function()
 poly = Sym(poly)
-print(schur(poly))
+#poly = schur(poly)
+#print((poly.coefficients()[0]).coefficients())
+#print(poly.coefficients()[0])
+
+def schur_positive(poly):
+  poly = schur(poly)
+  schur_coefficients = poly.coefficients()
+  for p in schur_coefficients:
+    sub_coeff = p.coefficients()
+    for x in sub_coeff:
+      if x<0:
+        return False
+  return True
+
+for n in range(1,7):
+    for k in range(1,n+1):
+        poly = TriPark(n,k)
+        poly = poly.to_symmetric_function()
+        poly = Sym(poly)
+        print(schur_positive(poly))
+  
 
 
 
