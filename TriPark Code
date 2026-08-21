@@ -1,0 +1,13 @@
+R.<q,t> = PolynomialRing(ZZ)
+Sym = SymmetricFunctions(R)
+
+"""
+code to compute BPR's TriPark for r = 1
+"""
+
+def parking_sum(P):
+  b = P.upper_dyck_word()
+  pf_list = b.list_parking_functions()
+  tot = 0
+  for park in pf_list:
+    
