@@ -7,8 +7,9 @@ ges = Q.F()
 """
 code to compute BPR's TriPark for r = 1
 """
+
 def co(f):
-  pass
+  return f.ides_composition()
 
 def dinv(f):
   return t^(f.dinv())
@@ -35,6 +36,8 @@ def TriPark(n,k):
     if r(P) == k:
       poly = poly + d(P)*parking_sum(P)
   return poly
+
+
 
 
     
