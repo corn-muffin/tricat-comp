@@ -1,0 +1,91 @@
+R.<q,t> = PolynomialRing(ZZ)
+
+#number of contacts in lower path
+def r_lower(P):
+    a = P.lower_dyck_word()
+    return a.number_of_touch_points()
+
+#number of contacts in upper path
+def r_upper(P):
+    b = P.upper_dyck_word()
+    return b.number_of_touch_points()
+
+#dinv of the upper dyck path
+def dinv(P):
+  return t^(P.upper_dyck_word()).dinv()
+
+#distance
+def d(P):
+  return q^(P.number_of_tamari_inversions())
+
+#TriCat_{n, k_a}
+def TriCat(n,k):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r_lower(P) == k:
+      poly = poly + dinv(P)*d(P)
+  return poly
+
+#TriCat_{n, k_a, k_b}. the underscore 'cat' is for catalytic :)
+def TriCat_cat(n,k_1,k_2):
+  TIP = TamariIntervalPosets(n)
+  poly = 0
+  for P in TIP:
+    if r_lower(P) == k_1 and r_upper(P) == k_2:
+      poly = poly + dinv(P)*d(P)
+  return poly
+
+def X(m,n,k):
+    return q^(binomial(n,2))*TriCat_cat(n,n-m,k)(q^(-1),q)
+
+#######
+def strict_increasing_sequences(n, d):
+    return [tuple(s) for s in UnorderedTuples(range(1,n), d) 
+            if all(s[i] < s[i+1] for i in range(len(s) - 1))]
+
+def all_seq(j,n,m):
+  all = []
+  temp = []
+  if j == 0:
+    return [(n,m,0,0)]
+  for d in range(0, j):
+    temp = temp + strict_increasing_sequences(j, d)
+  #print(temp)
+  for seq in temp:
+    new = (n,m,j) + seq[::-1] + (0,0) 
+    all.append(new)
+  return all
+
+def P(s):
+    r = len(s)
+    prod = 1
+    for i in range(2,r-1):
+        prod = prod*q_binomial(s[i-2] + s[i-1] - s[i] - s[i+1] - 1, s[i-1] - s[i] - 1)*q^(s[i+1]*(s[i-1] - s[i]))
+    #print(prod)
+    return prod
+
+            
+def F(n,m,j):
+  all = all_seq(j,n,m)
+  #print(all)
+  tot = 0
+  for s in all:
+    tot = tot + P(s)/q_binomial(s[-3],1)
+  return tot
+  
+
+def conjecture(m,n,k):
+  poly = 0
+  if m == 0:
+        poly = poly + q^(n*(k-1))*q_binomial(2*n -k-1, n - k)*q_binomial(k,1)/q_binomial(n,1)
+        return poly 
+  for j in range(0,m):
+    poly = poly + q^(j*(n-k-m+1))*q_binomial(2*n - k - m - j-1, n - k - m)*F(n,m,j)
+  poly = poly*q_binomial(k,1)*q^(n*(k-1)+m)
+  return poly
+
+for n in range(1,10):
+  for m in range(0,n):
+    for k in range(1,n - m + 1):
+      print(conjecture(m,n,k) - X(m,n,k))
